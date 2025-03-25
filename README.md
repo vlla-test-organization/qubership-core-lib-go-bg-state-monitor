@@ -1,3 +1,9 @@
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?metric=coverage&project=Netcracker_qubership-core-lib-go-bg-state-monitor)](https://sonarcloud.io/summary/overall?id=Netcracker_qubership-core-lib-go-bg-state-monitor)
+[![duplicated_lines_density](https://sonarcloud.io/api/project_badges/measure?metric=duplicated_lines_density&project=Netcracker_qubership-core-lib-go-bg-state-monitor)](https://sonarcloud.io/summary/overall?id=Netcracker_qubership-core-lib-go-bg-state-monitor)
+[![vulnerabilities](https://sonarcloud.io/api/project_badges/measure?metric=vulnerabilities&project=Netcracker_qubership-core-lib-go-bg-state-monitor)](https://sonarcloud.io/summary/overall?id=Netcracker_qubership-core-lib-go-bg-state-monitor)
+[![bugs](https://sonarcloud.io/api/project_badges/measure?metric=bugs&project=Netcracker_qubership-core-lib-go-bg-state-monitor)](https://sonarcloud.io/summary/overall?id=Netcracker_qubership-core-lib-go-bg-state-monitor)
+[![code_smells](https://sonarcloud.io/api/project_badges/measure?metric=code_smells&project=Netcracker_qubership-core-lib-go-bg-state-monitor)](https://sonarcloud.io/summary/overall?id=Netcracker_qubership-core-lib-go-bg-state-monitor)
+
 # blue-green-state-monitor-go
 
 ## Usage with fixed consul token
