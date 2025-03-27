@@ -27,7 +27,9 @@ func TestNewPath403_OldPath_404(t *testing.T) {
 	})
 	defer ts.Close()
 	DefaultPollingWaitTime = time.Second
-	publisher, err := NewPublisher(context.Background(), ts.URL, testOriginNamespace, nil)
+	publisher, err := NewPublisher(context.Background(), ts.URL, testOriginNamespace, func(ctx context.Context) (string, error) {
+		return "test-token", nil
+	})
 	assertions.NoError(err)
 	assertions.NotNil(publisher)
 	state := publisher.GetState()
