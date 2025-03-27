@@ -32,7 +32,21 @@ func TestInMemoryPublisherSubscribeUnsubscribe(t *testing.T) {
 	})
 	assertions.True(waitWG(3*time.Second, wg))
 
+	wgUnsubscribed := &sync.WaitGroup{}
+	wgUnsubscribed.Add(1)
+	go func() {
+		for {
+			if len(publisher.subscribers) == 0 {
+				wgUnsubscribed.Done()
+				break
+			}
+			time.Sleep(100 * time.Millisecond)
+		}
+	}()
+
 	cancel() // since cancel is async operation, need to add subscribe one more time to make sure that un-subscription has taken place
+
+	assertions.True(waitWG(1*time.Second, wgUnsubscribed))
 
 	wg3 := &sync.WaitGroup{}
 	wg3.Add(1)
