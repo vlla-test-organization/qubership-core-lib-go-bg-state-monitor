@@ -17,7 +17,9 @@ import (
 )
 
 var (
-	DefaultPollingWaitTime = time.Minute * 5
+	DefaultPollingWaitTime = 5 * time.Minute
+	DefaultTimeoutDuration = 30 * time.Second
+	DefaultRetryDelay = 10 * time.Second
 	BgStateConsulPath      = "config/%s/application/bluegreen/bgstate"
 	BgStateConsulPathNew   = "bluegreen/%s/bgstate"
 )
@@ -65,7 +67,7 @@ func NewPublisher(ctx context.Context, consulUrl, namespace string,
 
 	go wt.run(ctx, wc)
 
-	timeoutDuration := 30 * time.Second
+	timeoutDuration := DefaultTimeoutDuration
 	timeoutTimer := time.NewTimer(timeoutDuration)
 
 	select {
@@ -201,14 +203,20 @@ func (w *watcherTask) run(ctx context.Context, wc chan struct{}) {
 					stateAndIndex, err = sendAndParse(BgStateConsulPath, w.lastModifyIndexFallback)
 					if stateAndIndex != nil {
 						w.lastModifyIndexFallback = stateAndIndex.index
-					} else if err != nil {
-						retryDelay = 5 * time.Second
-						log.WarnC(ctx, "Error happened on long polling request '%s', retrying after %s. Reason: %s",
-							fmt.Sprintf(BgStateConsulPath, w.namespace), retryDelay, err.Error())
-						break
+					}
+					if err != nil {
+						if errors.Is(err, context.Canceled) {
+							break
+						}
+						retryDelay = DefaultRetryDelay
+						if !errors.As(err, &hErr) || hErr.statusCode != http.StatusNotFound {
+							log.WarnC(ctx, "Error happened on long polling request '%s', retrying after %s. Reason: %s",
+								fmt.Sprintf(BgStateConsulPath, w.namespace), retryDelay, err.Error())
+							break
+						}
 					}
 				} else {
-					retryDelay = 5 * time.Second
+					retryDelay = DefaultRetryDelay
 					log.WarnC(ctx, "Error happened on long polling request '%s'', retrying after %s. Reason: %s",
 						fmt.Sprintf(BgStateConsulPathNew, w.namespace), retryDelay, err.Error())
 					break
