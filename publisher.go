@@ -19,7 +19,7 @@ import (
 var (
 	DefaultPollingWaitTime = 5 * time.Minute
 	DefaultTimeoutDuration = 30 * time.Second
-	DefaultRetryDelay = 10 * time.Second
+	DefaultRetryDelay      = 10 * time.Second
 	BgStateConsulPath      = "config/%s/application/bluegreen/bgstate"
 	BgStateConsulPathNew   = "bluegreen/%s/bgstate"
 )
@@ -177,13 +177,13 @@ func (w *watcherTask) run(ctx context.Context, wc chan struct{}) {
 		response, err := sendRequest(pathTemplate, index)
 		if err != nil {
 			return nil, err
-		} else {
-			stateAndIndex, err := parseResponse(ctx, initiated, w.namespace, response)
-			if response.StatusCode < 200 || response.StatusCode >= 300 {
-				return stateAndIndex, &httrError{statusCode: response.StatusCode, cause: err}
-			}
-			return stateAndIndex, err
 		}
+		defer response.Body.Close()
+		stateAndIndex, err := parseResponse(ctx, initiated, w.namespace, response)
+		if response.StatusCode < 200 || response.StatusCode >= 300 {
+			return stateAndIndex, &httrError{statusCode: response.StatusCode, cause: err}
+		}
+		return stateAndIndex, err
 	}
 	for {
 		retryDelay := 0 * time.Second // by default, we retry immediately
@@ -265,7 +265,6 @@ func parseResponse(ctx context.Context, initiated bool, namespace string, respon
 		if err != nil {
 			return nil, err
 		}
-		defer response.Body.Close()
 		bodyBytes, err := io.ReadAll(response.Body)
 		if err != nil {
 			return nil, fmt.Errorf("failed to read response body: %w", err)
