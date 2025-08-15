@@ -12,8 +12,8 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/netcracker/qubership-core-lib-go-bg-state-monitor/v2/consul"
-	"github.com/netcracker/qubership-core-lib-go/v3/logging"
+	"github.com/vlla-test-organization/qubership-core-lib-go-bg-state-monitor/v2/consul"
+	"github.com/vlla-test-organization/qubership-core-lib-go/v3/logging"
 )
 
 var (
