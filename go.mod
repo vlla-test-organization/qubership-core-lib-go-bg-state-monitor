@@ -4,6 +4,10 @@ go 1.23
 
 toolchain go1.24.5
 
+retract (
+    v2.0.1
+)
+
 require (
 	github.com/hashicorp/consul/api v1.31.0
 	github.com/vlla-test-organization/qubership-core-lib-go/v3 latest
