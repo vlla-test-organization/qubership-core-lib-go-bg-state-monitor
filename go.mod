@@ -10,7 +10,7 @@ require (
 	github.com/hashicorp/consul/api v1.31.0
 	github.com/stretchr/testify v1.10.0
 	github.com/testcontainers/testcontainers-go v0.35.0
-	github.com/vlla-test-organization/qubership-core-lib-go/v3 v3.0.7
+	github.com/vlla-test-organization/qubership-core-lib-go/v3 v3.0.27
 )
 
 require (
